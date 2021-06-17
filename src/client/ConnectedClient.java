@@ -5,6 +5,7 @@ import client.networking.ClientNetworker;
 import engine.Camera;
 import networking.*;
 import networking.engine.ConnectedWorld;
+import networking.transit.MessageBuilder;
 import networking.transit.MessageChunk;
 
 import javax.swing.*;
@@ -30,7 +31,9 @@ public class ConnectedClient {
 //        name = Random.r.nextInt(100) + "";
 
         // Get username
-        name = JOptionPane.showInputDialog("Gimme a name, any name!");
+        name = JOptionPane.showInputDialog("Gimme a name, any name!")
+                .replaceAll(MessageChunk.del,"")
+                .replaceAll(MessageBuilder.del,"");
         System.out.println(name);
 
         // Make & Start World
