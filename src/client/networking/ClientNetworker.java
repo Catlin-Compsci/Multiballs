@@ -1,10 +1,8 @@
 package client.networking;
 
-import networking.ConnectedThing;
-import networking.ConnectedWorld;
-import networking.MessageBuilder;
-import networking.MessageChunk;
-import server.networking.ServerNetworker;
+import networking.engine.ConnectedWorld;
+import networking.transit.MessageBuilder;
+import networking.transit.MessageChunk;
 
 import java.io.BufferedReader;
 import java.io.IOException;

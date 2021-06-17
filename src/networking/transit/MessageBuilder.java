@@ -1,4 +1,6 @@
-package networking;
+package networking.transit;
+
+import networking.engine.ConnectedWorld;
 
 import java.util.LinkedList;
 
@@ -87,6 +89,8 @@ public class MessageBuilder {
         if(args[0].equals("r")) return new MessageChunk.ToServerChunk.ImRotatinHea(Integer.parseInt(args[1]),Double.parseDouble(args[2]));
         if(args[0].equals("d")) return new MessageChunk.ToClientChunk.TimeToDIEEEBullet(Integer.parseInt(args[1]));
         if(args[0].equals("h")) return new MessageChunk.ToClientChunk.Health(Integer.parseInt(args[1]),Double.parseDouble(args[2]));
+        if(args[0].equals("s")) return new MessageChunk.ToClientChunk.UgggOkBoringNameSetScore(Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+        if(args[0].equals("p")) return new MessageChunk.ToClientChunk.PlayerPoopooBreak(Integer.parseInt(args[1]),Boolean.parseBoolean(args[2]));
 
         else return null;
     }

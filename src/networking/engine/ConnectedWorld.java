@@ -1,8 +1,11 @@
-package networking;
+package networking.engine;
 
 import client.networking.ClientNetworker;
 import engine.World;
 import engine.objects.MainPlayer;
+import networking.transit.MessageBuilder;
+import networking.transit.MessageChunk;
+import networking.transit.ServerMessageBuilder;
 import server.networking.ServerNetworker;
 import utils.Random;
 
@@ -15,7 +18,7 @@ public class ConnectedWorld extends World {
     public Map<Integer, ConnectedThing> connectedThings = Collections.synchronizedMap(new HashMap<>());
     int lastConnectedId = 0;
 
-    MainPlayer me;
+    public MainPlayer me;
 
     public ConnectedWorld(boolean isClient) {
         this.isClient = isClient;

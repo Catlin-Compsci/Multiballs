@@ -3,12 +3,11 @@ package client;
 import client.graphics.GameWindow;
 import client.networking.ClientNetworker;
 import engine.Camera;
-import engine.World;
 import networking.*;
-import utils.Random;
+import networking.engine.ConnectedWorld;
+import networking.transit.MessageChunk;
 
 import javax.swing.*;
-import java.util.Scanner;
 
 public class ConnectedClient {
 

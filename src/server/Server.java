@@ -1,7 +1,7 @@
 package server;
 
 import networking.Config;
-import networking.ConnectedWorld;
+import networking.engine.ConnectedWorld;
 import server.networking.ServerNetworker;
 
 public class Server {

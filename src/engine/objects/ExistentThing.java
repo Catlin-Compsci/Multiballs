@@ -1,6 +1,6 @@
 package engine.objects;
 
-import networking.ConnectedThing;
+import networking.engine.ConnectedThing;
 
 public class ExistentThing extends TimedThing implements Tickable, ConnectedThing {
 

@@ -1,4 +1,4 @@
-package networking;
+package networking.engine;
 
 public interface ConnectedThing {
     public int getId();

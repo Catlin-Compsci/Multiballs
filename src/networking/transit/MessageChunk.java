@@ -1,9 +1,10 @@
-package networking;
+package networking.transit;
 
 import engine.objects.Bullet;
 import engine.objects.Player;
 import engine.objects.VelocityThing;
 import engine.properties.Colors;
+import networking.engine.ConnectedWorld;
 import server.networking.ServerNetworker;
 
 import java.awt.*;
@@ -68,8 +69,10 @@ public interface MessageChunk {
                 ServerMessageBuilder message = new ServerMessageBuilder(clientId);
                 world.players.forEach(p -> message.addChunks(
                         new ToClientChunk.Join(p.getId(), Colors.idOf(p.color), p.name),
-                        new ToClientChunk.Health(p.getId(),p.health)));
-                world.bullets.forEach(b -> message.addChunks(new ToClientChunk.MakeBullet(b.parentPlayer.getId(), b.getId(),0,0)));
+                        new ToClientChunk.Health(p.getId(), p.health),
+                        new ToClientChunk.UgggOkBoringNameSetScore(p.getId(), p.score)
+                ));
+                world.bullets.forEach(b -> message.addChunks(new ToClientChunk.MakeBullet(b.parentPlayer.getId(), b.getId(), 0, 0)));
 
                 System.out.println(name + " Joined the game");
                 Color playerColor = Colors.takeRandom();
@@ -155,7 +158,7 @@ public interface MessageChunk {
             @Override
             public void act(ConnectedWorld world) {
                 Player player = (Player) world.connectedThings.get(playerId);
-                if(player == null) return;
+                if (player == null) return;
                 player.rot = rot;
             }
         }
@@ -185,13 +188,13 @@ public interface MessageChunk {
             @Override
             public void act(ConnectedWorld world) {
                 Player player = (Player) world.connectedThings.get(playerThingId);
-                Bullet bullet = new Bullet(player,x,y);
+                Bullet bullet = new Bullet(player, x, y);
                 int id = world.addThing(bullet);
 
                 // Send
                 ServerNetworker.active.queue(new ServerMessageBuilder(ServerMessageBuilder.TO_ALL,
-                        new ToClientChunk.MakeBullet(playerThingId,id,x,y),
-                        new MessageChunk.ToServerChunk.ElonMuskWantsToSendHisLocation(id,bullet.x, bullet.xVel,bullet.y,bullet.yVel)
+                        new ToClientChunk.MakeBullet(playerThingId, id, x, y),
+                        new MessageChunk.ToServerChunk.ElonMuskWantsToSendHisLocation(id, bullet.x, bullet.xVel, bullet.y, bullet.yVel)
                 ));
 
                 world.bullets.add(bullet);
@@ -224,8 +227,8 @@ public interface MessageChunk {
 
             @Override
             public void act(ConnectedWorld world) {
-                Player player = (Player)world.connectedThings.get(id);
-                if(player == null) return;
+                Player player = (Player) world.connectedThings.get(id);
+                if (player == null) return;
                 player.health = health;
             }
         }
@@ -281,10 +284,38 @@ public interface MessageChunk {
             @Override
             public void act(ConnectedWorld world) {
                 Player player = (Player) world.connectedThings.get(playerThingId);
-                if(player == null) return;
+                if (player == null) return;
                 Bullet bullet = new Bullet(player);
-                world.putThing(bulletId,bullet);
+                world.putThing(bulletId, bullet);
                 world.bullets.add(bullet);
+            }
+        }
+
+        class UgggOkBoringNameSetScore implements ToClientChunk {
+
+            int playerId;
+            int score;
+
+            public UgggOkBoringNameSetScore(int playerId, int score) {
+                this.playerId = playerId;
+                this.score = score;
+            }
+
+            @Override
+            public char getPrefix() {
+                return 's';
+            }
+
+            @Override
+            public String getChunk() {
+                return getPrefix() + del + playerId + del + score;
+            }
+
+            @Override
+            public void act(ConnectedWorld world) {
+                Player player = (Player) world.connectedThings.get(playerId);
+                if (player == null) return;
+                player.score = score;
             }
         }
 
@@ -318,6 +349,35 @@ public interface MessageChunk {
                 world.putThing(id, player);
                 world.players.add(player);
                 System.out.println(name + " joined the game!");
+            }
+        }
+
+        class PlayerPoopooBreak implements ToClientChunk {
+
+            int playerId;
+            boolean is;
+
+            public PlayerPoopooBreak(int playerId, boolean is) {
+                this.playerId = playerId;
+                this.is = is;
+            }
+
+            @Override
+            public char getPrefix() {
+                return 'p';
+            }
+
+            @Override
+            public String getChunk() {
+                return getPrefix() + del + playerId + del + is;
+            }
+
+            @Override
+            public void act(ConnectedWorld world) {
+                Player player = (Player)world.connectedThings.get(playerId);
+                if(player == null) return;
+                if(is) player.knockout();
+                else player.respawn();
             }
         }
 
@@ -368,7 +428,7 @@ public interface MessageChunk {
 
             @Override
             public void act(ConnectedWorld world) {
-                world.putThing(id,world.me);
+                world.putThing(id, world.me);
                 world.me.color = Colors.colors[colorId];
                 System.out.println("this must be the place");
             }

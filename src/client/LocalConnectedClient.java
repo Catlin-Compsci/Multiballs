@@ -4,9 +4,11 @@ import client.graphics.GameWindow;
 import client.networking.ClientNetworker;
 import engine.Camera;
 import networking.Config;
-import networking.ConnectedWorld;
-import networking.MessageChunk;
+import networking.engine.ConnectedWorld;
+import networking.transit.MessageChunk;
 import utils.Random;
+
+import javax.swing.*;
 
 public class LocalConnectedClient {
 
@@ -23,10 +25,10 @@ public class LocalConnectedClient {
     String name;
 
     public LocalConnectedClient() {
-//        Scanner console = new Scanner(System.in);
-//        System.out.println("Bro!!!! Nice to seee you duddddeee!! Ummmmm Errrmmmmmm Wuts ur name again? oopsie doopsie");
-//        name = console.nextLine();
-        name = Random.r.nextInt(100) + "";
+
+        // Get username
+        name = JOptionPane.showInputDialog("Gimme a name, any name!");
+        System.out.println(name);
 
         // Make & Start World
         world = new ConnectedWorld(true);

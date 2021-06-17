@@ -1,4 +1,4 @@
-package networking;
+package networking.transit;
 
 
 import server.networking.ServerNetworker;

@@ -3,6 +3,15 @@ package engine.objects;
 import utils.Time;
 
 public class TimedThing {
+
+    public TimedThing() {
+
+    }
+
+    public TimedThing(double seconds) {
+        lastTime = System.nanoTime() - (int)(seconds * Time.NANO_PERIOD);
+    }
+
     long lastTime = System.nanoTime();
     long pausedElapse = 0;
     private boolean paused = false;
